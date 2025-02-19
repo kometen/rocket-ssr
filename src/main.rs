@@ -1,7 +1,10 @@
-use rocket::fs::NamedFile;
 use rocket::response::content::RawHtml;
 use rocket::{async_trait, get, launch, routes};
-use std::path::{Path, PathBuf};
+use rocket_include_static_resources::{static_resources_initializer, static_response_handler};
+
+static_response_handler! {
+    "/favicon.ico" => favicon => "favicon",
+}
 
 #[async_trait]
 trait FaviconTemplate {
@@ -37,12 +40,11 @@ async fn index() -> RawHtml<String> {
     IndexPage.render().await
 }
 
-#[get("/static/<file..>")]
-async fn files(file: PathBuf) -> Option<NamedFile> {
-    NamedFile::open(Path::new("static/").join(file)).await.ok()
-}
-
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index, files])
+    rocket::build()
+        .attach(static_resources_initializer!(
+            "favicon" => "static/favicon.ico",
+        ))
+        .mount("/", routes![index, favicon])
 }
