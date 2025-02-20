@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 rocket = "0.5.1"
 rocket-include-static-resources = "0.10.5"
+rocket_dyn_templates = { version = "0.2.0", features = ["tera"] }

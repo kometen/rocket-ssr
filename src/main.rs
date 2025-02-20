@@ -1,5 +1,5 @@
-use rocket::response::content::RawHtml;
 use rocket::{async_trait, get, launch, routes};
+use rocket_dyn_templates::{context, Template};
 use rocket_include_static_resources::{static_resources_initializer, static_response_handler};
 
 static_response_handler! {
@@ -22,22 +22,20 @@ impl FaviconTemplate for FaviconPage {
 
 #[async_trait]
 trait IndexTemplate {
-    async fn render(&self) -> RawHtml<String>;
+    async fn render(&self) -> Template;
 }
 
 struct IndexPage;
 #[async_trait]
 impl IndexTemplate for IndexPage {
-    async fn render(&self) -> RawHtml<String> {
+    async fn render(&self) -> Template {
         let favicon = FaviconPage.render().await;
-        RawHtml(format!(
-            "<DOCTYPE html><html><head>{favicon}</head><body><h1>Hello, world!</h1></body></html>",
-        ))
+        Template::render("index", context! {})
     }
 }
 
 #[get("/")]
-async fn index() -> RawHtml<String> {
+async fn index() -> Template {
     IndexPage.render().await
 }
 
@@ -48,4 +46,5 @@ fn rocket() -> _ {
             "favicon" => "static/favicon.ico",
         ))
         .mount("/", routes![index, favicon, favicon_static])
+        .attach(Template::fairing())
 }
