@@ -8,19 +8,6 @@ static_response_handler! {
 }
 
 #[async_trait]
-trait FaviconTemplate {
-    async fn render(&self) -> String;
-}
-
-struct FaviconPage;
-#[async_trait]
-impl FaviconTemplate for FaviconPage {
-    async fn render(&self) -> String {
-        "<link rel='icon' type='image/x-icon' href='/static/favicon.ico'>".to_string()
-    }
-}
-
-#[async_trait]
 trait IndexTemplate {
     async fn render(&self) -> Template;
 }
@@ -29,7 +16,6 @@ struct IndexPage;
 #[async_trait]
 impl IndexTemplate for IndexPage {
     async fn render(&self) -> Template {
-        let favicon = FaviconPage.render().await;
         Template::render("index", context! {})
     }
 }
