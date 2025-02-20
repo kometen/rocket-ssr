@@ -1,3 +1,6 @@
+mod test_page;
+
+use crate::test_page::test;
 use rocket::{async_trait, get, launch, routes};
 use rocket_dyn_templates::{context, Template};
 use rocket_include_static_resources::{static_resources_initializer, static_response_handler};
@@ -31,6 +34,9 @@ fn rocket() -> _ {
         .attach(static_resources_initializer!(
             "favicon" => "static/favicon.ico",
         ))
-        .mount("/", routes![index, favicon, favicon_static])
+        .mount("/", routes![index, favicon, favicon_static, test])
         .attach(Template::fairing())
 }
+
+#[cfg(test)]
+mod tests;
