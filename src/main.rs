@@ -4,6 +4,7 @@ use rocket_include_static_resources::{static_resources_initializer, static_respo
 
 static_response_handler! {
     "/favicon.ico" => favicon => "favicon",
+    "/static/favicon.ico" => favicon_static => "favicon",
 }
 
 #[async_trait]
@@ -46,5 +47,5 @@ fn rocket() -> _ {
         .attach(static_resources_initializer!(
             "favicon" => "static/favicon.ico",
         ))
-        .mount("/", routes![index, favicon])
+        .mount("/", routes![index, favicon, favicon_static])
 }
