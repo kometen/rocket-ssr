@@ -4,6 +4,7 @@ mod test_page;
 use crate::index_page::index;
 use crate::test_page::test;
 
+use rocket::fs::FileServer;
 use rocket::get;
 use rocket::{launch, routes};
 use rocket_dyn_templates::Template;
@@ -20,6 +21,7 @@ fn rocket() -> _ {
         .attach(static_resources_initializer!(
             "favicon" => "static/favicon.ico",
         ))
+        .mount("/static", FileServer::from("static"))
         .mount("/", routes![index, favicon, favicon_static, test])
         .attach(Template::fairing())
 }
