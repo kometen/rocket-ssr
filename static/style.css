@@ -1,5 +1,6 @@
 :root {
     --bg-color: #fff;
+    --header-bg-color: #e8e8e8;
     --text-color: #000;
     --button-bg-color: #333;
     --button-text-color: #fff;
@@ -11,6 +12,7 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --bg-color: #121212;
+        --header-bg-color: #2c2c2c;
         --text-color: #ffffff;
         --button-bg-color: #444;
         --button-text-color: #ffffff;
@@ -30,7 +32,7 @@ body {
 }
 
 header {
-    background-color: var(--bg-color);
+    background-color: var(--header-bg-color);
     color: var(--text-color);
     padding: 20px;
     text-align: center;
