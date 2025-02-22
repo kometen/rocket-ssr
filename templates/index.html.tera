@@ -1,27 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
-    <title>{% block title %}My Site{% endblock title %}</title>
-</head>
-<body>
-    <header>
-        <!-- Static header content -->
-        <nav>
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-        </nav>
-    </header>
+{% extends "base" %}
 
-    <main>
-        {% block content %}{% endblock content %}
-    </main>
+{% block title %}Home{% endblock title %}
 
-    <footer>
-        <!-- Static footer content -->
-        <p>&copy; 2024 Claus Guttesen</p>
-    </footer>
-</body>
-</html>
+{% block content %}
+    <!-- Static content -->
+    <h1>Welcome to my website</h1>
+    <div class="static-content">
+        <p>This is static content that doesn't change.</p>
+    </div>
+
+    <!-- Dynamic content -->
+    {% if user_data %}
+        <div class="user-data">
+            <p>Welcome back, {{ user_data.name }}!</p>
+        </div>
+    {% endif %}
+{% endblock content %}
