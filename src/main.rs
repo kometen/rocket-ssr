@@ -1,6 +1,8 @@
+mod about_page;
 mod index_page;
 mod test_page;
 
+use crate::about_page::about;
 use crate::index_page::index;
 use crate::test_page::test;
 
@@ -22,7 +24,7 @@ fn rocket() -> _ {
             "favicon" => "static/favicon.ico",
         ))
         .mount("/static", FileServer::from("static"))
-        .mount("/", routes![index, favicon, favicon_static, test])
+        .mount("/", routes![index, about, favicon, favicon_static, test])
         .attach(Template::fairing())
 }
 

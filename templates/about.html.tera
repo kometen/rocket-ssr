@@ -1,0 +1,12 @@
+{% extends "base" %}
+
+{% block title %}About{% endblock title %}
+
+{% block content %}
+    <!-- Static content -->
+    <h1>About Me</h1>
+    <div class="static-content">
+        <p>Claus is my name.</p>
+    </div>
+
+{% endblock content %}
