@@ -39,6 +39,10 @@ header {
     border-bottom: 1px solid var(--text-color);
 }
 
+main {
+    padding: 10px;
+}
+
 nav a {
     color: var(--text-color);
     text-decoration: none;
