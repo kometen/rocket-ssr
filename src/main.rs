@@ -1,11 +1,17 @@
 mod about_page;
+mod client;
 mod index_page;
+mod models;
+mod passwordless;
 mod test_page;
 
 use crate::about_page::about;
+use crate::client::PasswordlessClient;
 use crate::index_page::index;
 use crate::test_page::test;
+use dotenv::dotenv;
 
+use passwordless::{login, register};
 use rocket::fs::FileServer;
 use rocket::get;
 use rocket::{launch, routes};
@@ -19,12 +25,21 @@ static_response_handler! {
 
 #[launch]
 fn rocket() -> _ {
+    dotenv().ok();
+
+    let client = PasswordlessClient::new(
+        &std::env::var("PASSWORDLESS_API_SECRET").expect("PASSWORDLESS_API_SECRET must be set."),
+        &std::env::var("PASSWORDLESS_API_URL").expect("PASSWORDLESS_API_URL must be set."),
+    );
+
     rocket::build()
         .attach(static_resources_initializer!(
             "favicon" => "static/favicon.ico",
         ))
         .mount("/static", FileServer::from("static"))
         .mount("/", routes![index, about, favicon, favicon_static, test])
+        .mount("/passwordless/api", routes![register, login])
+        .manage(client)
         .attach(Template::fairing())
 }
 

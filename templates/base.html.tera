@@ -23,5 +23,15 @@
         <!-- Static footer content -->
         <p>&copy; 2025 Claus Guttesen</p>
     </footer>
+
+    <script>
+        const API_URL = "{{ passwordless_api_url | safe }}";
+        const API_KEY = "{{ passwordless_api_key | safe }}";
+    </script>
+    <script src="static/debug.js"></script>
+    <script src="https://cdn.passwordless.dev/dist/1.1.0/umd/passwordless.umd.min.js" crossorigin="anonymous"></script>
+    <script src="static/client-register.js"></script>
+    <script src="static/client-signin.js"></script>
+
 </body>
 </html>
