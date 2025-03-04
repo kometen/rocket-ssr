@@ -1,5 +1,6 @@
+use crate::auth_context::AuthContext;
 use rocket::{async_trait, get};
-use rocket_dyn_templates::{context, Template};
+use rocket_dyn_templates::Template;
 
 #[async_trait]
 trait AboutTemplate {
@@ -10,14 +11,7 @@ struct AboutPage;
 #[async_trait]
 impl AboutTemplate for AboutPage {
     async fn render(&self) -> Template {
-        let passwordless_api_key =
-            &std::env::var("PASSWORDLESS_API_KEY").expect("PASSWORDLESS_API_KEY must be set.");
-        let passwordless_api_url =
-            &std::env::var("PASSWORDLESS_API_URL").expect("PASSWORDLESS_API_URL must be set.");
-        Template::render(
-            "about",
-            context! { passwordless_api_url: passwordless_api_url, passwordless_api_key: passwordless_api_key  },
-        )
+        AuthContext::new().render_template("about")
     }
 }
 

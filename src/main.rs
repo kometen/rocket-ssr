@@ -1,4 +1,5 @@
 mod about_page;
+mod auth_context;
 mod client;
 mod index_page;
 mod models;
