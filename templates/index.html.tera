@@ -7,6 +7,8 @@
     <h1>Welcome to my website</h1>
     <div class="static-content">
         <p>This is static content that doesn't change.</p>
+        <button id="passwordless-signin">Login</button>
+        <pre id="status"></pre>
     </div>
 
     <!-- Dynamic content -->
