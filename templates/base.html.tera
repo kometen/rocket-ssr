@@ -30,8 +30,8 @@
     </script>
     <script src="static/debug.js"></script>
     <script src="https://cdn.passwordless.dev/dist/1.1.0/umd/passwordless.umd.min.js" crossorigin="anonymous"></script>
-    <script src="static/client-register.min.js"></script>
-    <script src="static/client-signin.min.js"></script>
+    <script src="static/client-register.js"></script>
+    <script src="static/client-signin.js"></script>
 
 </body>
 </html>
