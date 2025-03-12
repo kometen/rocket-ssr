@@ -35,12 +35,18 @@ header {
     background-color: var(--header-bg-color);
     color: var(--text-color);
     padding: 20px;
-    text-align: center;
     border-bottom: 1px solid var(--text-color);
 }
 
 main {
     padding: 10px;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 nav a {
@@ -53,11 +59,8 @@ nav a:hover {
     text-decoration: underline;
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 60vh;
+.spacer {
+    flex: 1;
 }
 
 .card {

@@ -1,0 +1,25 @@
+{% extends "base" %}
+
+{% block title %}Register{% endblock title %}
+
+{% block content %}
+    <!-- Static content -->
+    <h1>Register your account</h1>
+    <div class="static-content">
+        <p>Please fill out the form below to create your account.</p>
+        <strong>Username</strong>
+        <input type="text" id="username" placeholder="Username, Email etc"/>
+
+        <strong>Alias:</strong>
+        <input type="text" id="alias" placeholder="Username, Email etc"/>
+        <button id="passwordless-register">Register</button>
+        <pre id="status"></pre>
+    </div>
+
+    <!-- Dynamic content -->
+    {% if user_data %}
+        <div class="user-data">
+            <p>Welcome back, {{ user_data.name }}!</p>
+        </div>
+    {% endif %}
+{% endblock content %}
