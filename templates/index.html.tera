@@ -12,9 +12,16 @@
     </div>
 
     <!-- Dynamic content -->
-    {% if user_data %}
+    {% if user %}
         <div class="user-data">
-            <p>Welcome back, {{ user_data.name }}!</p>
+            <p>Welcome, {{ user.username | default(value="User") }}!</p>
+            {% if user.alias %}
+                <p>Alias: {{ user.alias }}</p>
+            {% endif %}
+            {% if user.email %}
+                <p>Email: {{ user.email }}</p>
+            {% endif %}
+            <a href="/logout" class="logout-button">Logout</a>
         </div>
     {% endif %}
 {% endblock content %}

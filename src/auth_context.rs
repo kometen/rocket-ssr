@@ -1,18 +1,22 @@
 use rocket_dyn_templates::{context, Template};
 
+use crate::session::UserProfile;
+
 pub struct AuthContext {
+    pub user: Option<UserProfile>,
     pub passwordless_api_key: String,
     pub passwordless_api_url: String,
 }
 
 impl AuthContext {
-    pub fn new() -> Self {
+    pub fn new(user: Option<UserProfile>) -> Self {
         let passwordless_api_key =
             std::env::var("PASSWORDLESS_API_KEY").expect("PASSWORDLESS_API_KEY must be set.");
         let passwordless_api_url =
             std::env::var("PASSWORDLESS_API_URL").expect("PASSWORDLESS_API_URL must be set.");
 
         Self {
+            user,
             passwordless_api_key,
             passwordless_api_url,
         }
@@ -20,12 +24,12 @@ impl AuthContext {
 
     pub fn render_template(&self, template_name: &str) -> Template {
         let template_name_owned = template_name.to_string();
-        Template::render(
-            template_name_owned,
-            context! {
-                passwordless_api_url: self.passwordless_api_url.clone(),
-                passwordless_api_key: self.passwordless_api_key.clone()
-            },
-        )
+        let context = context! {
+            user: &self.user,
+            passwordless_api_url: self.passwordless_api_url.clone(),
+            passwordless_api_key: self.passwordless_api_key.clone()
+        };
+
+        Template::render(template_name_owned, context)
     }
 }

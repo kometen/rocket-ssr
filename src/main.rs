@@ -5,6 +5,8 @@ mod index_page;
 mod models;
 mod passwordless;
 mod register_account_page;
+mod request_guard;
+mod session;
 mod test_page;
 
 use crate::about_page::about;
@@ -14,12 +16,14 @@ use crate::register_account_page::register_account;
 use crate::test_page::test;
 use dotenv::dotenv;
 
-use passwordless::{login, register};
+use passwordless::{login, logout, register};
 use rocket::fs::FileServer;
 use rocket::get;
+use rocket::tokio::sync::RwLock;
 use rocket::{launch, routes};
 use rocket_dyn_templates::Template;
 use rocket_include_static_resources::{static_resources_initializer, static_response_handler};
+use session::SessionStore;
 
 static_response_handler! {
     "/favicon.ico" => favicon => "favicon",
@@ -35,6 +39,8 @@ fn rocket() -> _ {
         &std::env::var("PASSWORDLESS_API_URL").expect("PASSWORDLESS_API_URL must be set."),
     );
 
+    let session_store = RwLock::new(SessionStore::new());
+
     rocket::build()
         .attach(static_resources_initializer!(
             "favicon" => "static/favicon.ico",
@@ -48,11 +54,13 @@ fn rocket() -> _ {
                 favicon,
                 favicon_static,
                 register_account,
-                test
+                test,
+                logout
             ],
         )
         .mount("/passwordless/api", routes![register, login])
         .manage(client)
+        .manage(session_store)
         .attach(Template::fairing())
 }
 

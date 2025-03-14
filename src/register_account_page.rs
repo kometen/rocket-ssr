@@ -1,21 +1,21 @@
-use crate::auth_context::AuthContext;
+use crate::{auth_context::AuthContext, request_guard::User};
 use rocket::{async_trait, get};
 use rocket_dyn_templates::Template;
 
 #[async_trait]
 trait RegisterAccountTemplate {
-    async fn render(&self) -> Template;
+    async fn render(&self, user: User) -> Template;
 }
 
 struct RegisterAccountPage;
 #[async_trait]
 impl RegisterAccountTemplate for RegisterAccountPage {
-    async fn render(&self) -> Template {
-        AuthContext::new().render_template("register_account")
+    async fn render(&self, user: User) -> Template {
+        AuthContext::new(user.0).render_template("register_account")
     }
 }
 
 #[get("/register")]
-pub async fn register_account() -> Template {
-    RegisterAccountPage.render().await
+pub async fn register_account(user: User) -> Template {
+    RegisterAccountPage.render(user).await
 }

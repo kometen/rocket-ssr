@@ -1,8 +1,18 @@
 use crate::{
     client::PasswordlessClient,
     models::{RegisterRequest, SignInVerifyRequest},
+    session::{SessionStore, UserProfile},
 };
-use rocket::{http::Status, post, response::status::Custom, serde::json::Json, State};
+use rocket::{
+    get,
+    http::{Cookie, Status},
+    post,
+    response::status::Custom,
+    serde::json::Json,
+    tokio::sync::RwLock,
+    State,
+};
+use rocket::{http::CookieJar, response::Redirect};
 use serde_json::{json, Value};
 
 fn extract_string_field(data: &Value, field: &str) -> Result<String, Custom<Value>> {
@@ -54,12 +64,71 @@ pub async fn register(
 pub async fn login(
     client: &State<PasswordlessClient>,
     data: Json<SignInVerifyRequest>,
+    cookies: &CookieJar<'_>,
+    session_store: &State<RwLock<SessionStore>>,
 ) -> Result<Value, Custom<Value>> {
     match client.sign_in(&data).await {
-        Ok(response) => Ok(json!(response)),
+        Ok(response) => {
+            if let Some(user_id) = extract_user_id_from_response(&response) {
+                let session_token = uuid::Uuid::new_v4().to_string();
+
+                let profile = UserProfile {
+                    user_id,
+                    username: extract_username_from_response(&response),
+                    display_name: extract_display_name_from_response(&response),
+                };
+
+                let mut store = session_store.write().await;
+                store.add_session(session_token.clone(), profile);
+
+                cookies.add(Cookie::new("session_token", session_token));
+
+                Ok(json!({"success": true, "message": "Login successful"}))
+            } else {
+                Err(Custom(
+                    Status::InternalServerError,
+                    json!({ "error": "Failed to extract user information" }),
+                ))
+            }
+        }
         Err(e) => Err(Custom(
             Status::InternalServerError,
             json!({ "error": e.to_string() }),
         )),
     }
+}
+
+#[get("/logout")]
+pub async fn logout(
+    cookies: &CookieJar<'_>,
+    session_store: &State<RwLock<SessionStore>>,
+) -> Redirect {
+    if let Some(token) = cookies.get("session_token") {
+        let token_val = token.value().to_string();
+        let mut store = session_store.write().await;
+        store.remove_session(&token_val);
+        cookies.remove(Cookie::from("session_token"));
+    }
+    Redirect::to("/")
+}
+
+fn extract_user_id_from_response(response: &Value) -> Option<String> {
+    response
+        .get("user_id")
+        .and_then(|v| v.as_str())
+        .map(|s| s.to_string())
+}
+
+fn extract_username_from_response(response: &Value) -> Option<String> {
+    response
+        .get("username")
+        .and_then(|v| v.as_str())
+        .map(|s| s.to_string())
+}
+
+fn extract_display_name_from_response(response: &Value) -> Option<String> {
+    response
+        .get("display_name")
+        .and_then(|v| v.as_str())
+        .map(|s| s.to_string())
 }
