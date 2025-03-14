@@ -1,9 +1,9 @@
 mod about_page;
 mod auth_context;
+mod auth_handlers;
 mod client;
 mod index_page;
 mod models;
-mod passwordless;
 mod register_account_page;
 mod request_guard;
 mod session;
@@ -16,7 +16,7 @@ use crate::register_account_page::register_account;
 use crate::test_page::test;
 use dotenv::dotenv;
 
-use passwordless::{login, logout, register};
+use auth_handlers::{login, logout, register};
 use rocket::fs::FileServer;
 use rocket::get;
 use rocket::tokio::sync::RwLock;
