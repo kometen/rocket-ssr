@@ -7,21 +7,24 @@
     <h1>Welcome to my website</h1>
     <div class="static-content">
         <p>This is static content that doesn't change.</p>
-        <button id="passwordless-signin">Login</button>
         <pre id="status"></pre>
     </div>
 
     <!-- Dynamic content -->
     {% if user %}
         <div class="user-data">
-            <p>Welcome, {{ user.username | default(value="User") }}!</p>
-            {% if user.alias %}
-                <p>Alias: {{ user.alias }}</p>
+            <h2>Welcome, {{ user.username | default(value="User") }}!</h2>
+            {% if user.user_id %}
+                <p>User-id: {{ user.user_id }}</p>
             {% endif %}
             {% if user.email %}
                 <p>Email: {{ user.email }}</p>
             {% endif %}
             <a href="/logout" class="logout-button">Logout</a>
+        </div>
+    {% else %}
+        <div class="user-data">
+            <button id="passwordless-signin">Login</button>
         </div>
     {% endif %}
 {% endblock content %}

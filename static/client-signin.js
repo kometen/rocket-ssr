@@ -42,6 +42,13 @@ async function handleSigninClick(e) {
 
     const user = await response.json();
 
+    if (response.ok) {
+      window.location.reload();
+    } else {
+      Status("Sign in failed, received the following error");
+      Status(JSON.stringify(user, null, 2));
+    }
+
     /**
      * Done - you can now check the user result for status, userid etc
      */

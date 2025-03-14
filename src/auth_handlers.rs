@@ -78,6 +78,8 @@ pub async fn login(
                     display_name: extract_display_name_from_response(&response),
                 };
 
+                println!("profile: {:?}", &profile);
+
                 let mut store = session_store.write().await;
                 store.add_session(session_token.clone(), profile);
 
@@ -113,8 +115,9 @@ pub async fn logout(
 }
 
 fn extract_user_id_from_response(response: &Value) -> Option<String> {
+    println!("response: {}", &response);
     response
-        .get("user_id")
+        .get("userId")
         .and_then(|v| v.as_str())
         .map(|s| s.to_string())
 }

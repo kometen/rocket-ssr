@@ -14,9 +14,9 @@ use crate::client::PasswordlessClient;
 use crate::index_page::index;
 use crate::register_account_page::register_account;
 use crate::test_page::test;
-use dotenv::dotenv;
 
 use auth_handlers::{login, logout, register};
+use dotenv::dotenv;
 use rocket::fs::FileServer;
 use rocket::get;
 use rocket::tokio::sync::RwLock;
