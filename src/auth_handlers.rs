@@ -38,18 +38,17 @@ pub async fn register(
 ) -> Result<Value, Custom<Value>> {
     let user_id = extract_string_field(&data, "userId")?;
     let username = extract_string_field(&data, "username")?;
-    let display_name = extract_string_field(&data, "alias")?;
+    let aliases: Vec<String> = extract_string_field(&data, "aliases")?
+        .as_str()
+        .split(',')
+        .map(|s| s.to_string())
+        .collect();
 
     let register_options = RegisterRequest {
         user_id,
         username,
-        display_name,
+        aliases,
     };
-
-    println!(
-        "user_id: {}, username: {}, display_name: {}",
-        register_options.user_id, register_options.username, register_options.display_name
-    );
 
     match client.register_token(&register_options).await {
         Ok(token) => Ok(json!(token)),
@@ -75,10 +74,8 @@ pub async fn login(
                 let profile = UserProfile {
                     user_id,
                     username: extract_username_from_response(&response),
-                    display_name: extract_display_name_from_response(&response),
+                    aliases: extract_displayname_from_response(&response),
                 };
-
-                println!("profile: {:?}", &profile);
 
                 let mut store = session_store.write().await;
                 store.add_session(session_token.clone(), profile);
@@ -129,9 +126,10 @@ fn extract_username_from_response(response: &Value) -> Option<String> {
         .map(|s| s.to_string())
 }
 
-fn extract_display_name_from_response(response: &Value) -> Option<String> {
+fn extract_displayname_from_response(response: &Value) -> Option<Vec<String>> {
     response
-        .get("display_name")
+        .get("aliases")
         .and_then(|v| v.as_str())
         .map(|s| s.to_string())
+        .map(|s| vec![s])
 }

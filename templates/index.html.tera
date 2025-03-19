@@ -17,8 +17,8 @@
             {% if user.user_id %}
                 <p>User-id: {{ user.user_id }}</p>
             {% endif %}
-            {% if user.email %}
-                <p>Email: {{ user.email }}</p>
+            {% if user.aliases %}
+                <p>Aliases: {{ user.aliases }}</p>
             {% endif %}
             <a href="/logout" class="logout-button">Logout</a>
         </div>
