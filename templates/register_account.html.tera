@@ -8,10 +8,10 @@
     <div class="static-content">
         <p>Please fill out the form below to create your account.</p>
         <strong>Username</strong>
-        <input type="text" id="username" placeholder="Username, Email etc"/>
+        <input type="text" id="username" placeholder="username"/>
 
-        <strong>Alias:</strong>
-        <input type="text" id="alias" placeholder="Username, Email etc"/>
+        <strong>Aliases:</strong>
+        <input type="text" id="aliases" placeholder="aliases"/>
         <button id="passwordless-register">Register</button>
         <pre id="status"></pre>
     </div>

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 pub struct UserProfile {
     pub user_id: String,
     pub username: Option<String>,
-    pub display_name: Option<String>,
+    pub aliases: Option<Vec<String>>,
 }
 
 pub(crate) struct SessionStore {

@@ -35,8 +35,7 @@ pub struct RegisterRequest {
     #[serde(rename = "userId")]
     pub user_id: String,
     pub username: String,
-    #[serde(rename = "displayname")]
-    pub display_name: String,
+    pub aliases: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

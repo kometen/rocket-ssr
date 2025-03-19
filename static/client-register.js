@@ -1,8 +1,8 @@
 async function handleRegisterClick(e) {
   e.preventDefault();
 
-  const alias = document.getElementById("alias").value;
   const username = document.getElementById("username").value;
+  const aliases = document.getElementById("aliases").value;
 
   Status("Starting registering...");
 
@@ -17,7 +17,7 @@ async function handleRegisterClick(e) {
   const signupData = {
     userId: self.crypto.randomUUID(),
     username: username,
-    alias: alias,
+    aliases: aliases,
   };
 
   /**
