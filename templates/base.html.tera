@@ -11,6 +11,7 @@
         <!-- Static header content -->
         <nav>
             <a href="/">Home</a>
+            <a href="/message">Message</a>
             <span class="spacer"></span>
             <a href="/about">About</a>
             <a href="/register">Register</a>

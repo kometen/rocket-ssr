@@ -1,8 +1,10 @@
 mod about_page;
+mod api;
 mod auth_context;
 mod auth_handlers;
 mod client;
 mod index_page;
+mod message_page;
 mod models;
 mod register_account_page;
 mod request_guard;
@@ -10,6 +12,7 @@ mod session;
 mod test_page;
 
 use crate::about_page::about;
+use crate::api::save_message;
 use crate::client::PasswordlessClient;
 use crate::index_page::index;
 use crate::register_account_page::register_account;
@@ -17,6 +20,7 @@ use crate::test_page::test;
 
 use auth_handlers::{login, logout, register};
 use dotenv::dotenv;
+use message_page::message;
 use rocket::fs::FileServer;
 use rocket::get;
 use rocket::tokio::sync::RwLock;
@@ -50,6 +54,8 @@ fn rocket() -> _ {
             "/",
             routes![
                 index,
+                message,
+                save_message,
                 about,
                 favicon,
                 favicon_static,
