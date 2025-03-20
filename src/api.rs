@@ -1,11 +1,10 @@
+use crate::persistence::EncryptedMessage;
+use crate::persistence::MessageRepository;
+use rocket::get;
+use rocket::http::Status;
+use rocket::State;
 use rocket::{post, serde::json::Json};
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Deserialize)]
-pub struct EncryptedMessage {
-    pub encrypted_message: String,
-    pub iv: String,
-}
+use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct MessageResponse {
@@ -14,15 +13,27 @@ pub struct MessageResponse {
 }
 
 #[post("/api/messages", format = "json", data = "<message>")]
-pub fn save_message(message: Json<EncryptedMessage>) -> Json<MessageResponse> {
-    // Store the encrypted message and IV in your database
-    // In a real application, you'd generate a unique ID and save the data
+pub async fn save_message(
+    message: Json<EncryptedMessage>,
+    repo: &State<MessageRepository>,
+) -> Result<Json<MessageResponse>, Status> {
+    match repo.save_message(&message).await {
+        Ok(id) => Ok(Json(MessageResponse {
+            id: id.to_string(),
+            status: "success".to_string(),
+        })),
+        Err(_) => Err(Status::InternalServerError),
+    }
+}
 
-    let message_id = format!("{}", rand::random::<u64>());
-
-    // For demonstration, we're just returning an ID without actually saving
-    Json(MessageResponse {
-        id: message_id,
-        status: "success".to_string(),
-    })
+#[get("/api/messages/<id>")]
+pub async fn get_message(
+    id: String,
+    repo: &State<MessageRepository>,
+) -> Result<Json<EncryptedMessage>, Status> {
+    match repo.get_message(&id).await {
+        Ok(Some(message)) => Ok(Json(message)),
+        Ok(None) => Err(Status::NotFound),
+        Err(_) => Err(Status::InternalServerError),
+    }
 }

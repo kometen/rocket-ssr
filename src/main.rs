@@ -6,13 +6,14 @@ mod client;
 mod index_page;
 mod message_page;
 mod models;
+mod persistence;
 mod register_account_page;
 mod request_guard;
 mod session;
 mod test_page;
 
 use crate::about_page::about;
-use crate::api::save_message;
+use crate::api::{get_message, save_message};
 use crate::client::PasswordlessClient;
 use crate::index_page::index;
 use crate::register_account_page::register_account;
@@ -23,19 +24,21 @@ use dotenv::dotenv;
 use message_page::message;
 use rocket::fs::FileServer;
 use rocket::get;
+use rocket::routes;
 use rocket::tokio::sync::RwLock;
-use rocket::{launch, routes};
 use rocket_dyn_templates::Template;
 use rocket_include_static_resources::{static_resources_initializer, static_response_handler};
 use session::SessionStore;
+use std::fs;
+use std::path::Path;
 
 static_response_handler! {
     "/favicon.ico" => favicon => "favicon",
     "/static/favicon.ico" => favicon_static => "favicon",
 }
 
-#[launch]
-fn rocket() -> _ {
+#[rocket::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
 
     let client = PasswordlessClient::new(
@@ -45,7 +48,18 @@ fn rocket() -> _ {
 
     let session_store = RwLock::new(SessionStore::new());
 
-    rocket::build()
+    // Create a data directory if it doesn't exist
+    let data_dir = Path::new("./data");
+    if !data_dir.exists() {
+        fs::create_dir(data_dir)?;
+    }
+
+    let db_path = data_dir.join("sqlite.db").to_str().unwrap().to_string();
+    println!("path: {}", &db_path);
+
+    let db = persistence::MessageRepository::new(&db_path).await?;
+
+    let rocket = rocket::build()
         .attach(static_resources_initializer!(
             "favicon" => "static/favicon.ico",
         ))
@@ -55,6 +69,7 @@ fn rocket() -> _ {
             routes![
                 index,
                 message,
+                get_message,
                 save_message,
                 about,
                 favicon,
@@ -67,7 +82,12 @@ fn rocket() -> _ {
         .mount("/passwordless/api", routes![register, login])
         .manage(client)
         .manage(session_store)
-        .attach(Template::fairing())
+        .manage(db)
+        .attach(Template::fairing());
+
+    rocket.launch().await?;
+
+    Ok(())
 }
 
 #[cfg(test)]
