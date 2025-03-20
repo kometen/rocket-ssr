@@ -1,0 +1,37 @@
+{% extends "base" %}
+{% block content %}
+<div class="container">
+  <h1>Secure Message System</h1>
+
+  <div id="message-form">
+    <div class="form-group">
+      <label for="message">Your message:</label>
+      <textarea id="message" class="form-control" rows="5"></textarea>
+    </div>
+    <button id="encrypt-button" class="btn btn-primary">Encrypt & Submit</button>
+  </div>
+
+  <div id="encryption-result" style="display: none;">
+
+    <div class="alert alert-success">
+      <h4>Message encrypted successfully!</h4>
+      <p>Your encryption key has been downloaded to your device.</p>
+      <p>Share this key with anyone you want to be able to read your message.</p>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-header">Encrypted Message</div>
+        <div class="card-body">
+          <p id="encrypted-message-display" class="text-break"></p>
+        </div>
+        <div class="card-footer">
+          <button id="copy-encrypted" class="btn btn-sm btn-outline-secondary">Copy to Clipboard</button>
+        </div>
+      </div>
+
+    <button id="new-message" class="btn btn-secondary">Create Another Message</button>
+  </div>
+</div>
+
+<script src="/static/encryption.js"></script>
+{% endblock %}
