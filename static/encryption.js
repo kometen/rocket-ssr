@@ -84,18 +84,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function downloadKey(keyString) {
     const element = document.createElement("a");
-    element.setAttribute(
-      "href",
-      "data:application/octet-stream;base64," + keyString,
-    );
+    // Create a text blob with the base64 string
+    const blob = new Blob([keyString], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    element.setAttribute("href", url);
     element.setAttribute(
       "download",
-      "encryption-key-" + new Date().getTime() + ".key",
+      "encryption-key-" + new Date().getTime() + ".txt",
     );
     element.style.display = "none";
     document.body.appendChild(element);
     element.click();
+
+    // Clean up
     document.body.removeChild(element);
+    URL.revokeObjectURL(url);
   }
 
   async function sendEncryptedMessage(encryptedData, iv) {

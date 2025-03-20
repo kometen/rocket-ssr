@@ -15,11 +15,6 @@ pub struct MessageResponse {
 
 #[post("/api/messages", format = "json", data = "<message>")]
 pub fn save_message(message: Json<EncryptedMessage>) -> Json<MessageResponse> {
-    println!(
-        "Encrypted message: {}, iv: {}",
-        message.encrypted_message, message.iv
-    );
-
     // Store the encrypted message and IV in your database
     // In a real application, you'd generate a unique ID and save the data
 
