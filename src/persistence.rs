@@ -1,38 +1,35 @@
+use crate::api::EncryptedMessage;
 use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine as _};
 use rand::{rng, RngCore};
-use serde::{Deserialize, Serialize};
 use sqlx::{sqlite::SqlitePoolOptions, Row, SqlitePool};
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct EncryptedMessage {
-    pub id: String,
-    pub encrypted_message: String,
-    pub iv: String,
-    pub created_at: chrono::DateTime<chrono::Utc>,
-}
 
 pub struct MessageRepository {
     pool: SqlitePool,
 }
 
 impl MessageRepository {
-    pub async fn new(db_path: &str) -> Result<Self, sqlx::Error> {
+    pub async fn new(db_url: &str) -> Result<Self, sqlx::Error> {
         let db_pool = SqlitePoolOptions::new()
             .max_connections(5)
-            .connect(db_path)
+            .connect(db_url)
             .await?;
 
         // Create table if it doesn't exist
-        sqlx::query(
+        let create_table_result = sqlx::query(
             "CREATE TABLE IF NOT EXISTS messages (
-                id TEXT PRIMARY KEY NOT NULL,
-                encrypted_message TEXT NOT NULL,
-                iv TEXT NOT NULL,
-                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-            )",
+                    id TEXT PRIMARY KEY NOT NULL,
+                    encrypted_message TEXT NOT NULL,
+                    iv TEXT NOT NULL,
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                )",
         )
         .execute(&db_pool)
-        .await?;
+        .await;
+
+        match create_table_result {
+            Ok(_) => println!("Table present or created successfully"),
+            Err(e) => println!("Error creating table: {}", e),
+        }
 
         Ok(Self { pool: db_pool })
     }
@@ -78,7 +75,7 @@ impl MessageRepository {
                     id,
                     encrypted_message,
                     iv,
-                    created_at,
+                    created_at: Some(created_at),
                 }))
             }
             None => Ok(None),

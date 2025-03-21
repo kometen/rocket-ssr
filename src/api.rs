@@ -1,10 +1,17 @@
-use crate::persistence::EncryptedMessage;
 use crate::persistence::MessageRepository;
 use rocket::get;
 use rocket::http::Status;
 use rocket::State;
 use rocket::{post, serde::json::Json};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct EncryptedMessage {
+    pub id: Option<String>,
+    pub encrypted_message: String,
+    pub iv: String,
+    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+}
 
 #[derive(Serialize)]
 pub struct MessageResponse {
@@ -17,6 +24,8 @@ pub async fn save_message(
     message: Json<EncryptedMessage>,
     repo: &State<MessageRepository>,
 ) -> Result<Json<MessageResponse>, Status> {
+    println!("message: {:?}", message);
+
     match repo.save_message(&message).await {
         Ok(id) => Ok(Json(MessageResponse {
             id: id.to_string(),

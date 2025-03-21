@@ -54,10 +54,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         fs::create_dir(data_dir)?;
     }
 
-    let db_path = data_dir.join("sqlite.db").to_str().unwrap().to_string();
-    println!("path: {}", &db_path);
+    // Create a database file if it doesn't exist
+    let db_path = data_dir.join("sqlite.db");
+    if !db_path.exists() {
+        fs::File::create(&db_path)?;
+    }
 
-    let db = persistence::MessageRepository::new(&db_path).await?;
+    let db_url = format!("sqlite://{}", db_path.display());
+
+    let db = persistence::MessageRepository::new(&db_url).await?;
 
     let rocket = rocket::build()
         .attach(static_resources_initializer!(
