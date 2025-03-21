@@ -1,11 +1,14 @@
 use rocket::http::Status;
 use rocket::local::blocking::Client;
+use rocket::routes;
 
-use super::rocket;
+//use super::rocket;
 
 #[test]
 fn hello_test() {
-    let client = Client::tracked(rocket()).expect("valid rocket");
+    // Create a test context instead of using super::rocket()
+    let rocket_instance = rocket::build().mount("/", routes![super::test]);
+    let client = Client::tracked(rocket_instance).expect("valid rocket");
     let response = client.get("/test").dispatch();
 
     assert_eq!(response.status(), Status::Ok);
