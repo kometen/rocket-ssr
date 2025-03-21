@@ -35,7 +35,7 @@ pub async fn save_message(
     }
 }
 
-#[get("/api/messages/<id>")]
+#[get("/api/message/<id>")]
 pub async fn get_message(
     id: String,
     repo: &State<MessageRepository>,

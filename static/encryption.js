@@ -127,7 +127,15 @@ document.addEventListener("DOMContentLoaded", function () {
       throw new Error("Failed to save message");
     }
 
-    return await response.json();
+    const responseData = await response.json();
+    const messageLink = `${window.location.origin}/message/${responseData.id}`;
+    const messageLinkElement = document.getElementById("message-link");
+    messageLinkElement.textContent = messageLink;
+    messageLinkElement.href = messageLink;
+
+    document.getElementById("message-link-container").style.display = "block";
+
+    return responseData;
   }
 });
 
@@ -146,3 +154,15 @@ document
       },
     );
   });
+
+document.getElementById("copy-link").addEventListener("click", function () {
+  const link = document.getElementById("message-link").textContent;
+  navigator.clipboard.writeText(link).then(
+    function () {
+      alert("Link copied to clipboard!");
+    },
+    function (err) {
+      console.error("Could not copy link: ", err);
+    },
+  );
+});

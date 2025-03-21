@@ -20,7 +20,7 @@
             {% if user.aliases %}
                 <p>Aliases: {{ user.aliases }}</p>
             {% endif %}
-            <a href="/logout" class="logout-button">Logout</a>
+            <button onclick="window.location.href='/logout'" class="button">Logout</button>
         </div>
     {% else %}
         <div class="user-data">

@@ -19,3 +19,10 @@ impl MessageTemplate for MessagePage {
 pub async fn message(user: User) -> Template {
     MessagePage.render(user).await
 }
+
+#[get("/message/<id>")]
+pub async fn view_message(id: &str, user: User) -> Template {
+    let mut context = AuthContext::new(user.0);
+    context.insert("id", id);
+    context.render_template("view_message")
+}

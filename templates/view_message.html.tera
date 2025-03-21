@@ -1,0 +1,116 @@
+{% extends "base" %}
+{% block content %}
+<div class="container">
+  <h1>Secure Message</h1>
+
+  <div class="card">
+    <div class="card-header">Decrypt Message</div>
+    <div class="card-body">
+      <p>To read this message, you need the encryption key that was shared with you.</p>
+
+      <div class="mb-3">
+        <label for="key-input" class="form-label">Encryption Key:</label>
+        <input type="text" class="form-control" id="key-input" placeholder="Paste the encryption key here">
+      </div>
+
+      <button id="decrypt-button" class="btn btn-primary">Decrypt Message</button>
+
+      <div id="decrypted-content" class="mt-4" style="display: none;">
+        <h4>Decrypted Message:</h4>
+        <div class="card">
+          <div class="card-body">
+            <p id="decrypted-message" class="mb-0"></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="error-message" class="alert alert-danger mt-3" style="display: none;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Store the message ID from the template
+const messageId = "{{ id }}";
+
+document.addEventListener('DOMContentLoaded', function() {
+  const decryptButton = document.getElementById('decrypt-button');
+
+  decryptButton.addEventListener('click', async function() {
+    try {
+      const keyInput = document.getElementById('key-input').value.trim();
+      if (!keyInput) {
+        showError("Please enter the encryption key");
+        return;
+      }
+
+      // Fetch the encrypted message from the server
+      const response = await fetch(`/api/message/${messageId}`);
+      if (!response.ok) {
+        showError("Message not found or has expired");
+        return;
+      }
+
+      const messageData = await response.json();
+      const decryptedMessage = await decryptMessage(
+        messageData.encrypted_message,
+        messageData.iv,
+        keyInput
+      );
+
+      // Display the decrypted message
+      document.getElementById('decrypted-message').textContent = decryptedMessage;
+      document.getElementById('decrypted-content').style.display = 'block';
+      document.getElementById('error-message').style.display = 'none';
+    } catch (error) {
+      showError("Failed to decrypt message: " + error.message);
+    }
+  });
+
+  function showError(message) {
+    const errorElement = document.getElementById('error-message');
+    errorElement.textContent = message;
+    errorElement.style.display = 'block';
+    document.getElementById('decrypted-content').style.display = 'none';
+  }
+
+  async function decryptMessage(encryptedBase64, ivBase64, keyBase64) {
+    // Convert base64 strings to array buffers
+    const encryptedData = base64ToArrayBuffer(encryptedBase64);
+    const iv = base64ToArrayBuffer(ivBase64);
+    const keyData = base64ToArrayBuffer(keyBase64);
+
+    // Import the key
+    const key = await window.crypto.subtle.importKey(
+      "raw",
+      keyData,
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["decrypt"]
+    );
+
+    // Decrypt the data
+    const decryptedData = await window.crypto.subtle.decrypt(
+      {
+        name: "AES-GCM",
+        iv: iv
+      },
+      key,
+      encryptedData
+    );
+
+    // Convert the decrypted data to text
+    return new TextDecoder().decode(decryptedData);
+  }
+
+  function base64ToArrayBuffer(base64) {
+    const binaryString = atob(base64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
+  }
+});
+</script>
+{% endblock %}

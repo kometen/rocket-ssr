@@ -19,6 +19,17 @@
       <p>Share this key with anyone you want to be able to read your message.</p>
     </div>
 
+    <div id="message-link-container" class="card mt-3">
+      <div class="card-header">Message Link</div>
+      <div class="card-body">
+        <p>Share this link with the recipient:</p>
+        <div class="input-group">
+          <a id="message-link" href="#" class="form-control text-break" target="_blank"></a>
+          <button id="copy-link" class="btn btn-outline-secondary">Copy Link</button>
+        </div>
+      </div>
+    </div>
+
     <div class="card mt-3">
         <div class="card-header">Encrypted Message</div>
         <div class="card-body">

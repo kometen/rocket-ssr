@@ -21,7 +21,7 @@ use crate::test_page::test;
 
 use auth_handlers::{login, logout, register};
 use dotenv::dotenv;
-use message_page::message;
+use message_page::{message, view_message};
 use rocket::fs::FileServer;
 use rocket::get;
 use rocket::routes;
@@ -76,6 +76,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 message,
                 get_message,
                 save_message,
+                view_message,
                 about,
                 favicon,
                 favicon_static,
