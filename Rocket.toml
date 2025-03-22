@@ -5,3 +5,7 @@ port = 8008
 [release]
 address = "127.0.0.1"
 port = 8008
+
+[limits]
+form = "4 kB"
+json = "4 kB"

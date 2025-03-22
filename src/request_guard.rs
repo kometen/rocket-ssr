@@ -35,7 +35,7 @@ pub struct LimitedId(pub String);
 impl<'r> FromParam<'r> for LimitedId {
     type Error = &'static str;
 
-    fn from_param(param: &'r str) -> Result<Self, Self::Error> {
+    fn from_param(param: &'r str) -> Result<LimitedId, Self::Error> {
         if param.len() > 30 {
             Err("ID parameter too long")
         } else {
