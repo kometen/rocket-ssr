@@ -58,7 +58,7 @@ impl MessageRepository {
     }
 
     pub async fn get_message(&self, id: &str) -> Result<Option<EncryptedMessage>, sqlx::Error> {
-        let sql = "SELECT id, encrypted_message, iv, created_at FROM messages WHERE id = ?";
+        let sql = "SELECT id, encrypted_message, iv FROM messages WHERE id = ?";
         let row = sqlx::query(sql).bind(id).fetch_optional(&self.pool).await?;
 
         match row {
@@ -66,16 +66,11 @@ impl MessageRepository {
                 let id = row.try_get("id")?;
                 let encrypted_message = row.try_get("encrypted_message")?;
                 let iv = row.try_get("iv")?;
-                let created_at_str: String = row.try_get("created_at")?;
-                let created_at = chrono::DateTime::parse_from_rfc3339(&created_at_str)
-                    .map_err(|_| sqlx::Error::RowNotFound)?
-                    .with_timezone(&chrono::Utc);
 
                 Ok(Some(EncryptedMessage {
                     id,
                     encrypted_message,
                     iv,
-                    created_at: Some(created_at),
                 }))
             }
             None => Ok(None),

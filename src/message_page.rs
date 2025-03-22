@@ -22,8 +22,8 @@ pub async fn message(user: User) -> Template {
 }
 
 #[get("/message/<id>")]
-pub async fn view_message(id: LimitedId<'_>, user: User) -> Template {
+pub async fn view_message(id: LimitedId, user: User) -> Template {
     let mut context = AuthContext::new(user.0);
-    context.insert("id", id.0);
+    context.insert("id", &id.0);
     context.render_template("view_message")
 }

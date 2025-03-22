@@ -11,7 +11,6 @@ pub struct EncryptedMessage {
     pub id: Option<String>,
     pub encrypted_message: String,
     pub iv: String,
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
 }
 
 #[derive(Serialize)]
@@ -38,10 +37,10 @@ pub async fn save_message(
 
 #[get("/api/message/<id>")]
 pub async fn get_message(
-    id: LimitedId<'_>,
+    id: LimitedId,
     repo: &State<MessageRepository>,
 ) -> Result<Json<EncryptedMessage>, Status> {
-    match repo.get_message(id.0).await {
+    match repo.get_message(&id.0).await {
         Ok(Some(message)) => Ok(Json(message)),
         Ok(None) => Err(Status::NotFound),
         Err(_) => Err(Status::InternalServerError),
