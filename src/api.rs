@@ -1,5 +1,5 @@
 use crate::persistence::MessageRepository;
-use crate::request_guard::LimitedId;
+use crate::request_guard::{LimitedId, User};
 use rocket::get;
 use rocket::http::Status;
 use rocket::State;
@@ -21,10 +21,13 @@ pub struct MessageResponse {
 
 #[post("/api/messages", format = "json", data = "<message>")]
 pub async fn save_message(
+    user: User,
     message: Json<EncryptedMessage>,
     repo: &State<MessageRepository>,
 ) -> Result<Json<MessageResponse>, Status> {
-    println!("message: {:?}", message);
+    if user.0.is_none() {
+        return Err(Status::Unauthorized);
+    }
 
     match repo.save_message(&message).await {
         Ok(id) => Ok(Json(MessageResponse {

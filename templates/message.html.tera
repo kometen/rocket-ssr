@@ -3,6 +3,8 @@
 <div class="container">
   <h1>Secure Message System</h1>
 
+  {% if user %}
+
   <div id="message-form">
     <div class="form-group">
       <label for="message">Your message:</label>
@@ -42,7 +44,16 @@
 
     <button id="new-message" class="btn btn-secondary">Create Another Message</button>
   </div>
-</div>
+
+  {% else %}
+
+  <div class="alert alert-warning">
+     <h4>Authentication Required</h4>
+     <p>You need to <a href="/">log in</a> or <a href="/register">register</a> to create encrypted messages.</p>
+   </div>
+   {% endif %}
+
+ </div>
 
 <script src="/static/encryption.js"></script>
 {% endblock %}
