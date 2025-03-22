@@ -33,10 +33,6 @@ impl AuthContext {
         self
     }
 
-    pub fn get(&self, key: &str) -> Option<&Value> {
-        self.custom_values.get(key)
-    }
-
     pub fn render_template(&self, template_name: &str) -> Template {
         let template_name_owned = template_name.to_string();
 

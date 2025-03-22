@@ -1,3 +1,4 @@
+use crate::request_guard::LimitedId;
 use crate::{auth_context::AuthContext, request_guard::User};
 use rocket::{async_trait, get};
 use rocket_dyn_templates::Template;
@@ -21,8 +22,8 @@ pub async fn message(user: User) -> Template {
 }
 
 #[get("/message/<id>")]
-pub async fn view_message(id: &str, user: User) -> Template {
+pub async fn view_message(id: LimitedId<'_>, user: User) -> Template {
     let mut context = AuthContext::new(user.0);
-    context.insert("id", id);
+    context.insert("id", id.0);
     context.render_template("view_message")
 }

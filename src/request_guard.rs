@@ -1,5 +1,10 @@
 use crate::session::{SessionStore, UserProfile};
-use rocket::{request::FromRequest, request::Outcome, tokio::sync::RwLock, Request};
+use rocket::http::Status;
+use rocket::{
+    request::{FromParam, FromRequest, Outcome},
+    tokio::sync::RwLock,
+    Request,
+};
 
 #[derive(Debug)]
 pub struct User(pub Option<UserProfile>);
@@ -23,5 +28,19 @@ impl<'r> FromRequest<'r> for User {
         }
 
         Outcome::Success(User(None))
+    }
+}
+
+pub struct LimitedId<'r>(pub &'r str);
+
+impl<'r> FromParam<'r> for LimitedId<'r> {
+    type Error = &'static str;
+
+    fn from_param(param: &'r str) -> Result<Self, Self::Error> {
+        if param.len() > 30 {
+            Err("ID parameter too long")
+        } else {
+            Ok(LimitedId(param))
+        }
     }
 }
