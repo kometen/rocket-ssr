@@ -112,7 +112,6 @@ pub async fn logout(
 }
 
 fn extract_user_id_from_response(response: &Value) -> Option<String> {
-    println!("response: {}", &response);
     response
         .get("userId")
         .and_then(|v| v.as_str())
