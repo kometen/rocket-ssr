@@ -237,3 +237,7 @@ nav a:hover {
         width: 70%;
     }
 }
+
+#decrypted-message {
+    white-space: pre-wrap;
+}
