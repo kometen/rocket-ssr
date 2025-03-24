@@ -1,34 +1,22 @@
 async function handleSigninClick(e) {
   e.preventDefault();
 
-  Status("Starting sign in...");
+  Toast.info("Starting sign in process...", "Authentication");
 
-  /**
-   * Initiate the Passwordless client with your public api key
-   */
   const p = new Passwordless.Client({
     apiUrl: API_URL,
     apiKey: API_KEY,
   });
 
   try {
-    /**
-     * Sign in - The Passwordless API and the browser initiates a sign in based on the alias
-     */
-
-    //var userId = await fetch("user/id").then(r => r.json()); // get user id from database
-
     const { token, error } = await p.signinWithAutofill();
     if (error) {
-      Status(JSON.stringify(error, null, 2));
-      Status("Sign in failed, received the following error");
+      Toast.error(error, "Sign In Failed");
       return;
     }
 
     console.log("Received token", token);
-    /**
-     * Verify the sign in - Call your backend to verify the token created from the sign in
-     */
+    Toast.info("Verifying with server...", "Authentication");
 
     const response = await fetch("/passwordless/api/login", {
       method: "POST",
@@ -43,22 +31,20 @@ async function handleSigninClick(e) {
     const user = await response.json();
 
     if (response.ok) {
-      window.location.reload();
+      Toast.success("Successfully signed in!", "Welcome");
+      // Reload page after a short delay to allow the toast to be seen
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } else {
-      Status("Sign in failed, received the following error");
-      Status(JSON.stringify(user, null, 2));
+      Toast.error(user.error || "Sign in failed", "Authentication Error");
     }
-
-    /**
-     * Done - you can now check the user result for status, userid etc
-     */
-    Status("User details: " + JSON.stringify(user, null, 2));
-    Status("Yey! Succesfully signed in without a password!");
-
-    console.log("User", user);
   } catch (e) {
-    console.error("Things went really bad: ", e);
-    Status("Things went bad, check console");
+    console.error("Sign in error:", e);
+    Toast.error(
+      e.message || "An unexpected error occurred",
+      "Authentication Error",
+    );
   }
 }
 

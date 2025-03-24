@@ -7,7 +7,6 @@
     <h1>Welcome to my website</h1>
     <div class="static-content">
         <p>This is static content that doesn't change.</p>
-        <pre id="status"></pre>
     </div>
 
     <!-- Dynamic content -->
