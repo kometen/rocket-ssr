@@ -4,11 +4,8 @@ async function handleRegisterClick(e) {
   const username = document.getElementById("username").value;
   const aliases = document.getElementById("aliases").value;
 
-  Status("Starting registering...");
+  Toast.info("Starting registration process...", "Registration");
 
-  /**
-   * Initiate the Passwordless client with your public api key
-   */
   const p = new Passwordless.Client({
     apiUrl: API_URL,
     apiKey: API_KEY,
@@ -20,44 +17,42 @@ async function handleRegisterClick(e) {
     aliases: aliases,
   };
 
-  /**
-   * Create token - Call your backend to retrieve a token that we can use client-side to register a passkey to an alias
-   */
-  const response = await fetch("/passwordless/api/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(signupData),
-  });
-
-  if (!response.ok) {
-    // If our demo backend did not respond with success, show error in UI
-    const errorData = await response.json();
-    throw new Error(errorData.error || "Registration failed");
-  }
-
-  const backendResponse = await response.json();
-  console.log("Registration successful:", backendResponse);
-
-  /**
-   *  Register a key - The Passwordless API and browser creates and stores a passkey, based on the token.
-   */
   try {
-    const { token, error } = await p.register(backendResponse.token);
-    if (token) {
-      Status("Successfully registered WebAuthn. You can now sign in!");
-    } else {
-      Status(JSON.stringify(error, null, 2));
-      Status("We failed to register a passkey: ");
+    const response = await fetch("/passwordless/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(signupData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Registration failed");
     }
 
-    /**
-     * Done - the user can now sign in using the passkey
-     */
+    const backendResponse = await response.json();
+    console.log("Registration successful:", backendResponse);
+
+    const { token, error } = await p.register(backendResponse.token);
+    if (token) {
+      Toast.success(
+        "Successfully registered your passkey!",
+        "Registration Complete",
+      );
+      // Optional: redirect after successful registration
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+    } else {
+      Toast.error(error || "Failed to register passkey", "Registration Error");
+    }
   } catch (e) {
-    console.error("Things went bad", e);
-    Status("Things went bad, check console");
+    console.error("Registration error:", e);
+    Toast.error(
+      e.message || "An unexpected error occurred",
+      "Registration Error",
+    );
   }
 }
 
