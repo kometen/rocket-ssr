@@ -8,7 +8,6 @@
     --input-text-color: #000;
 }
 
-/* Move these variable definitions to the media query */
 @media (prefers-color-scheme: dark) {
     :root {
         --bg-color: #121212;
@@ -21,6 +20,13 @@
     }
 }
 
+/* Page structure for sticky footer */
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
@@ -28,7 +34,9 @@ body {
         background-color 0.3s,
         color 0.3s;
     font-family: Arial, sans-serif;
-    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 header {
@@ -39,9 +47,27 @@ header {
 }
 
 main {
-    padding: 10px;
+    flex: 1; /* Makes main content expand to fill available space */
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+footer {
+    border-top: 1px solid var(--text-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 20px;
+    text-align: center;
+}
+
+/* Navigation */
 nav {
     display: flex;
     justify-content: center;
@@ -63,15 +89,103 @@ nav a:hover {
     flex: 1;
 }
 
+/* Component styling */
 .card {
     background-color: var(--bg-color);
+    border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    text-align: center;
+    margin-bottom: 20px;
 }
 
-button {
+.card-header {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    padding: 10px 15px;
+    margin: -20px -20px 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-weight: bold;
+}
+
+.card-body {
+    padding: 0 15px;
+}
+
+.card-footer {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+    padding: 10px 15px;
+    margin: 15px -20px -20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    display: block;
+    padding: 8px 12px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--input-text-color);
+    background-color: var(--input-bg-color);
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.message-textarea {
+    width: 100%;
+    min-height: 200px;
+    resize: vertical;
+}
+
+.alert {
+    position: relative;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.input-group {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.input-group .form-control {
+    flex: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group button {
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.text-break {
+    word-break: break-word !important;
+    word-wrap: break-word !important;
+}
+
+.btn {
     background-color: #007bff;
     color: #ffffff;
     border: none;
@@ -80,28 +194,46 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    margin-top: 20px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
 }
 
-button:hover {
+.btn:hover {
     background-color: #0056b3;
 }
 
-footer {
-    border-top: 1px solid var(--text-color);
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    padding: 20px;
-    text-align: center;
+.btn-primary {
+    background-color: #007bff;
 }
 
-.dark-mode-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 10px;
-    background-color: var(--button-bg-color);
-    color: var(--button-text-color);
-    border: none;
-    cursor: pointer;
+.btn-secondary {
+    background-color: #6c757d;
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    background-color: transparent;
+    border: 1px solid #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #6c757d;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+/* Media queries for responsive design */
+@media (min-width: 768px) {
+    .message-textarea {
+        width: 70%;
+    }
 }
