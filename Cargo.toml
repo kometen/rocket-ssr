@@ -10,7 +10,7 @@ dotenv = "0.15.0"
 passwords = "3.1.16"
 rand = "0.9.0"
 reqwest = { version = "0.12.12", features = ["json"] }
-rocket = { version = "0.5.1", features = ["json"] }
+rocket = { version = "0.5.1", features = ["json", "tls"] }
 rocket-include-static-resources = "0.10.5"
 rocket_dyn_templates = { version = "0.2.0", features = ["tera"] }
 serde = { version = "1.0.218", features = ["derive"] }
