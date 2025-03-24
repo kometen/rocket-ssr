@@ -1,4 +1,4 @@
-use crate::api::EncryptedMessage;
+use crate::api::api::EncryptedMessage;
 use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine as _};
 use rand::{rng, RngCore};
 use sqlx::{sqlite::SqlitePoolOptions, Row, SqlitePool};

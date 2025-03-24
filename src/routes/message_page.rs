@@ -1,5 +1,7 @@
-use crate::request_guard::LimitedId;
-use crate::{auth_context::AuthContext, request_guard::User};
+use crate::auth::{
+    auth_context::AuthContext,
+    request_guard::{LimitedId, User},
+};
 use rocket::{async_trait, get};
 use rocket_dyn_templates::Template;
 

@@ -1,5 +1,5 @@
+use crate::auth::request_guard::{LimitedId, User};
 use crate::persistence::MessageRepository;
-use crate::request_guard::{LimitedId, User};
 use rocket::get;
 use rocket::http::Status;
 use rocket::State;
