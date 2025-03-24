@@ -1,9 +1,8 @@
 use serde::Serialize;
 use serde_json::Value;
 
-use crate::models::{
+use crate::models::models::{
     Credential, DeleteCredentialRequest, RegisterRequest, RegisterResponse, SignInVerifyRequest,
-    SignInVerifyResponse,
 };
 
 pub struct PasswordlessClient {

@@ -1,6 +1,6 @@
 use crate::{
-    client::PasswordlessClient,
-    models::{RegisterRequest, SignInVerifyRequest},
+    auth::client::PasswordlessClient,
+    models::models::{RegisterRequest, SignInVerifyRequest},
     session::{SessionStore, UserProfile},
 };
 use rocket::{

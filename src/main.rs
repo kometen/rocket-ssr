@@ -1,33 +1,19 @@
-mod about_page;
 mod api;
-mod auth_context;
-mod auth_handlers;
-mod client;
-mod index_page;
-mod message_page;
+mod auth;
 mod models;
 mod persistence;
-mod register_account_page;
-mod request_guard;
-mod session;
-mod test_page;
+mod routes;
 
-use crate::about_page::about;
-use crate::api::{get_message, save_message};
-use crate::client::PasswordlessClient;
-use crate::index_page::index;
-use crate::register_account_page::register_account;
-use crate::test_page::test;
+use crate::auth::client::PasswordlessClient;
+use crate::routes::test_page::test;
 
-use auth_handlers::{login, logout, register};
+use api::{get_message, login, logout, register, save_message};
+use auth::session;
 use dotenv::dotenv;
-use message_page::{message, view_message};
-use rocket::fs::FileServer;
-use rocket::get;
-use rocket::routes;
-use rocket::tokio::sync::RwLock;
+use rocket::{fs::FileServer, get, routes, tokio::sync::RwLock};
 use rocket_dyn_templates::Template;
 use rocket_include_static_resources::{static_resources_initializer, static_response_handler};
+use routes::{about, index, message, register_account, view_message};
 use session::SessionStore;
 use std::fs;
 use std::path::Path;
@@ -77,11 +63,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 get_message,
                 save_message,
                 view_message,
+                test,
                 about,
                 favicon,
                 favicon_static,
                 register_account,
-                test,
                 logout
             ],
         )
@@ -95,6 +81,3 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
-
-#[cfg(test)]
-mod tests;
