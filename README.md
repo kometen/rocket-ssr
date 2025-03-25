@@ -32,7 +32,7 @@ Download key (optional).
 
 ![Download key](./download.png)
 
-Decrypt message using downloaded key.
+Decrypt message using provided key.
 
 ![Decrypt message](./decrypt.png)
 
