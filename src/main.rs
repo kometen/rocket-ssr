@@ -5,7 +5,6 @@ mod persistence;
 mod routes;
 
 use crate::auth::client::PasswordlessClient;
-use crate::routes::test_page::test;
 
 use api::{get_message, login, logout, register, save_message};
 use auth::session;
@@ -63,7 +62,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 get_message,
                 save_message,
                 view_message,
-                test,
                 about,
                 favicon,
                 favicon_static,

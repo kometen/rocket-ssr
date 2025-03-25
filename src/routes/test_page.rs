@@ -14,6 +14,7 @@ impl TestTemplate for TestPage {
     }
 }
 
+#[allow(dead_code)]
 #[get("/test")]
 pub async fn test() -> Template {
     TestPage.render().await
