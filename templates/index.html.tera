@@ -6,7 +6,7 @@
     <!-- Static content -->
     <h1>Welcome to my website</h1>
     <div class="static-content">
-        <p>This is static content that doesn't change.</p>
+        <p>Source code for this website is available on GitHub at <a href="https://github.com/kometen/rocket-ssr">https://github.com/kometen/rocket-ssr</a>.</p>
     </div>
 
     <!-- Dynamic content -->
