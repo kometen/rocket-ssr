@@ -15,6 +15,26 @@ https://obscura.bsky.dk/message/gKSxqMBjzj1Su0QAViN6zg
 
 and copy and paste the decryption key `sSjMGidFJzDuG6h2LNsxBHGr/dwgIoP+CWAOGgxRXZ8=` into the input field.
 
+---
+
+Too run this on your local machine, clone this repository, create an account at `https://admin.passwordless.dev/signup`, create
+an application after registering. A public and private key pair is generated for you. Save these keys in a safe place, for instance
+in a password manager.
+
+```
+git clone git@github.com:kometen/rocket-ssr.git
+cd rocket-ssr
+cat << 'EOF' > ./.env
+PASSWORDLESS_API_KEY=myapp:public:foobarbaz
+PASSWORDLESS_API_SECRET=myapp:secret:foobarbaz
+PASSWORDLESS_API_URL=https://v4.passwordless.dev
+EOF
+cargo run
+```
+
+Then open your browser at `http://localhost:8008`.
+
+---
 
 Register account (optional).
 
