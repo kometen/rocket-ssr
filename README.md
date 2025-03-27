@@ -17,7 +17,7 @@ and copy and paste the decryption key `sSjMGidFJzDuG6h2LNsxBHGr/dwgIoP+CWAOGgxRX
 
 ---
 
-Too run this on your local machine, clone this repository, create an account at `https://admin.passwordless.dev/signup`, create
+To run this on your local machine, clone this repository, create an account at `https://admin.passwordless.dev/signup`, create
 an application after registering. A public and private key pair is generated for you. Save these keys in a safe place, for instance
 in a password manager.
 
