@@ -38,23 +38,23 @@ Then open your browser at `http://localhost:8008`.
 
 Register account (optional).
 
-![Register account](./register.png)
+![Register account](./doc/register.png)
 
 Store passkey (optional).
 
-![Store passkey](./passkey.png)
+![Store passkey](./doc/passkey.png)
 
 Write message (optional).
 
-![Write message](./write.png)
+![Write message](./doc/write.png)
 
 Download key (optional).
 
-![Download key](./download.png)
+![Download key](./doc/download.png)
 
 Decrypt message using provided key.
 
-![Decrypt message](./decrypt.png)
+![Decrypt message](./doc/decrypt.png)
 
 Login based on an example at https://github.com/davidzr/passwordless-rust and the Bitwarden passwordless
 service at https://bitwarden.com/products/passwordless/.
