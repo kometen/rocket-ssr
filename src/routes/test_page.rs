@@ -24,11 +24,14 @@ pub async fn test() -> Template {
 mod tests {
 
     use rocket::{http::Status, local::blocking::Client, routes};
+    use rocket_dyn_templates::Template;
 
     #[test]
     fn hello_test() {
         // Create a test context instead of using super::rocket()
-        let rocket_instance = rocket::build().mount("/", routes![super::test]);
+        let rocket_instance = rocket::build()
+            .mount("/", routes![super::test])
+            .attach(Template::fairing());
         let client = Client::tracked(rocket_instance).expect("valid rocket");
         let response = client.get("/test").dispatch();
 

@@ -34,6 +34,18 @@ cargo run
 
 Then open your browser at `http://localhost:8008`.
 
+Run in a container.
+
+```
+cat << 'EOF' > ./.env
+PASSWORDLESS_API_KEY=myapp:public:foobarbaz
+PASSWORDLESS_API_SECRET=myapp:secret:foobarbaz
+PASSWORDLESS_API_URL=https://v4.passwordless.dev
+EOF
+docker build -t rocket-ssr:dev .
+docker run -e ROCKET_ADDRESS=0.0.0.0 -p 8008:8008 rocket-ssr:dev
+```
+
 ---
 
 Register account (optional).
