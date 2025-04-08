@@ -1,5 +1,6 @@
 mod api;
 mod auth;
+mod codec;
 mod models;
 mod persistence;
 mod routes;
